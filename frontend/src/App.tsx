@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+import Home from './pages/Home';
+import Reader from './pages/Reader';
+import About from './pages/About';
+import type { Network } from './lib/wallets/types';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [network, setNetwork] = useState<Network>('testnet');
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="min-h-screen bg-zinc-950">
+      <header className="border-b border-zinc-800 px-6 py-4">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <a href="/" className="text-xl font-bold text-zinc-100">permanentspeech</a>
+          <div className="flex items-center gap-4">
+            <select
+              value={network}
+              onChange={(e) => setNetwork(e.target.value as Network)}
+              className="bg-zinc-900 border border-zinc-700 rounded px-3 py-1 text-sm"
+            >
+              <option value="testnet">Testnet</option>
+              <option value="mainnet">Mainnet</option>
+            </select>
+            <a href="/about" className="text-zinc-400 hover:text-zinc-200 text-sm">About</a>
+          </div>
+        </div>
+      </header>
+      <main className="max-w-4xl mx-auto px-6 py-8">
+        <Routes>
+          <Route path="/" element={<Home network={network} />} />
+          <Route path="/tx/:txid" element={<Reader network={network} />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </main>
+      <footer className="border-t border-zinc-800 px-6 py-4 mt-auto">
+        <div className="max-w-4xl mx-auto text-center text-zinc-500 text-sm">
+          Write once. Never rewritten.
+        </div>
+      </footer>
+    </div>
+  );
 }
-
-export default App
