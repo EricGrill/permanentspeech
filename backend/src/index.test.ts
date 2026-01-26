@@ -16,8 +16,7 @@ describe('Server configuration', () => {
     const { default: app } = await import('./index.js');
 
     // Check that the app has the expected router stack
-    // @ts-expect-error accessing internal express property for testing
-    const middlewareStack = app._router?.stack || [];
+    const middlewareStack = (app as unknown as { _router?: { stack: unknown[] } })._router?.stack || [];
     expect(middlewareStack.length).toBeGreaterThan(0);
   });
 });
