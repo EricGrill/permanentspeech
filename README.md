@@ -1,107 +1,115 @@
 # PermanentSpeech
 
-> Write once. Never rewritten.
+Permissionless publishing to Bitcoin via OP_RETURN.
 
-PermanentSpeech is a permissionless publishing application that allows users to permanently inscribe short-form speech onto the Bitcoin blockchain using OP_RETURN.
+## Overview
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Bitcoin](https://img.shields.io/badge/Bitcoin-OP_RETURN-orange.svg)](https://bitcoin.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+PermanentSpeech is a platform for immutable, censorship-resistant publishing on the Bitcoin blockchain. It allows users to store text and data permanently using Bitcoin's OP_RETURN feature.
 
-## What is PermanentSpeech?
+## Features
 
-PermanentSpeech provides a censorship-resistant publication mechanism with cryptographically verifiable proof-of-publication. It is a neutral tool that does not moderate or curate on-chain content.
-
-### Key Features
-
-- **Permissionless**: No account required, no approval process
-- **Non-Custodial**: Users control their keys; no funds or private keys ever touch the server
-- **Immutable**: Content is permanently recorded on the Bitcoin blockchain
-- **Verifiable**: Trivial and transparent verification of published content
-
-## How It Works
-
-1. **Enter Text**: User enters text into the editor
-2. **Review**: App displays byte size, estimated fee, and permanence warning
-3. **Sign**: User signs the transaction with their wallet
-4. **Broadcast**: Transaction is broadcast to the Bitcoin network
-5. **Verify**: Content can be verified via transaction ID
-
-## Tech Stack
-
-### Frontend
-- React/Next.js
-- Client-side transaction building
-- WASM-based Bitcoin libraries
-
-### Backend
-- Node.js
-- Bitcoin Core full node
-- Broadcast + fee estimation
-
-## Quick Start
-
-```bash
-# Clone the repository
-git clone https://github.com/EricGrill/permanentspeech.git
-cd permanentspeech
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp backend/.env.example backend/.env
-# Edit backend/.env with your settings
-
-# Run development server
-npm run dev
-```
+- **Permissionless Publishing**: No accounts or permissions required
+- **Bitcoin Native**: Uses OP_RETURN for data storage
+- **Immutable**: Once published, content cannot be altered or removed
+- **Backend API**: Express.js API for handling publishing requests
+- **Rate Limiting**: Built-in protection against spam
 
 ## Project Structure
 
 ```
 permanentspeech/
-├── backend/          # Node.js backend service
-├── frontend/         # React frontend application
+├── backend/          # Express.js API server
+├── frontend/         # Web interface
 ├── docs/            # Documentation
-└── plan.MD          # Product requirements document
+└── .claude/         # Claude-specific configuration
 ```
 
-## Payload Specification
+## Quick Start
 
-### On-Chain Payload (Binary)
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Bitcoin node (for full functionality)
+
+### Backend Setup
+
+```bash
+cd backend
+
+# Copy environment configuration
+cp .env.example .env
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
-[Magic Bytes][Version][Content Type][Encoding][Payload]
+
+### Frontend Setup
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-Example:
-- Magic: `PSP1`
-- Version: `0x01`
-- Content Type: `0x01` (plain text)
-- Encoding: `0x01` (UTF-8)
-- Payload: text bytes
+## Configuration
 
-## Safety & Legal Considerations
+### Environment Variables
 
-### Immutable Reality Disclosure
+Create a `.env` file in the backend directory:
 
-**Important**: Content published via PermanentSpeech will be permanently recorded on the Bitcoin blockchain and cannot be removed or altered.
+```bash
+cp backend/.env.example backend/.env
+```
 
-### Platform Stance
+Required variables:
 
-- PermanentSpeech.com does not create or control content
-- The platform provides tooling only
-- No content moderation or censorship
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `PORT` | Server port | No (default: 3000) |
+| `BITCOIN_RPC_URL` | Bitcoin RPC endpoint | Yes |
+| `BITCOIN_RPC_USER` | RPC username | Yes |
+| `BITCOIN_RPC_PASS` | RPC password | Yes |
+| `RATE_LIMIT_WINDOW_MS` | Rate limit window | No (default: 900000) |
+| `RATE_LIMIT_MAX` | Max requests per window | No (default: 100) |
+
+## API Endpoints
+
+### POST /publish
+
+Publish content to Bitcoin blockchain.
+
+**Request:**
+```json
+{
+  "content": "Your text to publish"
+}
+```
+
+**Response:**
+```json
+{
+  "txid": "abc123...",
+  "blockHeight": 1234567,
+  "timestamp": "2026-01-26T10:00:00Z"
+}
+```
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please read our contributing guidelines before submitting PRs.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT License - see [LICENSE](./LICENSE) for details.
 
-## Acknowledgments
+## Disclaimer
 
-- Built for the Bitcoin community
-- Inspired by the need for censorship-resistant communication
+This project interacts with the Bitcoin blockchain. All transactions are irreversible. Use at your own risk.
